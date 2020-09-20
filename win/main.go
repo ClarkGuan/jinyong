@@ -1,14 +1,19 @@
 package main
 
 import (
-	"github.com/lxn/walk/declarative"
+	"fmt"
+	"os"
+
+	. "github.com/lxn/walk/declarative"
 )
 
 func main() {
-	mainWindow := declarative.MainWindow{
-		Title:   "金庸原版修改器",
-		MinSize: declarative.Size{Width: 600, Height: 400},
-		Layout:  declarative.VBox{},
+	_, err := MainWindow{
+		Title:   "金庸群侠传修改器",
+		MinSize: Size{Width: 400, Height: 480},
+		Layout:  HBox{},
+	}.Run()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
-	mainWindow.Run()
 }
