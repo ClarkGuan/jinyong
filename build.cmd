@@ -1,5 +1,5 @@
 @echo off
 
-rsrc -manifest win\main.manifest -o win\rsrc.syso
-REM go build -ldflags="-H windowsgui" -o jinyong.exe ./win
-go build -o jinyong.exe ./win
+rsrc -manifest ui\main.manifest -o ui\rsrc.syso
+REM go build -ldflags="-H windowsgui" -o jinyong.exe ./ui
+go build -o jinyong.exe ./ui

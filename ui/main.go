@@ -5,8 +5,6 @@ package main
 import (
 	"fmt"
 	"os"
-
-	. "github.com/lxn/walk/declarative"
 )
 
 func main() {
