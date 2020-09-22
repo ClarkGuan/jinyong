@@ -79,6 +79,14 @@ func (p Property) UpdateQualification(i int16) Property {
 	return p.updateValue(0x3BC, i)
 }
 
+func (p Property) Morality() int16 {
+	return p.value(0x3B4)
+}
+
+func (p Property) UpdateMorality(i int16) Property {
+	return p.updateValue(0x3B4, i)
+}
+
 var Gongfu = []string{"无",
 	"野球拳", "武当长拳", "罗汉拳", "灵蛇拳",
 	"神王毒掌", "七伤拳", "混元掌", "寒冰绵掌",
