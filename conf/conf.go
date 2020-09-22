@@ -8,7 +8,26 @@ import (
 	"unsafe"
 )
 
-var Gongfu = []string{
+type Property []byte
+
+func (p Property) value(index int) int16 {
+	return Int16(p, index)
+}
+
+func (p Property) updateValue(index int, v int16) Property {
+	SetInt16(p, index, v)
+	return p
+}
+
+func (p Property) Body() int16 {
+	return p.value(0x36E)
+}
+
+func (p Property) UpdateBody(i int16) Property {
+	return p.updateValue(0x36E, i)
+}
+
+var Gongfu = []string{"无",
 	"野球拳", "武当长拳", "罗汉拳", "灵蛇拳",
 	"神王毒掌", "七伤拳", "混元掌", "寒冰绵掌",
 	"鹰爪功", "逍遥掌", "铁掌", "幻阴指",
@@ -38,7 +57,7 @@ var GongfuID = map[string]int{}
 
 func init() {
 	for i, s := range Gongfu {
-		GongfuID[s] = i + 1
+		GongfuID[s] = i
 	}
 }
 
@@ -87,10 +106,19 @@ func SavesPath(dir string) ([]string, error) {
 }
 
 func Uint16(buf []byte, index int) uint16 {
-	return uint16(buf[index]) | uint16(buf[index])<<8
+	return uint16(buf[index]) | uint16(buf[index+1])<<8
 }
 
 func Int16(buf []byte, index int) int16 {
 	ret := Uint16(buf, index)
 	return *((*int16)(unsafe.Pointer(&ret)))
+}
+
+func SetUint16(buf []byte, index int, value uint16) {
+	buf[index] = byte(value)
+	buf[index+1] = byte(value >> 8)
+}
+
+func SetInt16(buf []byte, index int, value int16) {
+	SetUint16(buf, index, *((*uint16)(unsafe.Pointer(&value))))
 }
