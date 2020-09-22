@@ -27,6 +27,58 @@ func (p Property) UpdateBody(i int16) Property {
 	return p.updateValue(0x36E, i)
 }
 
+func (p Property) Life() int16 {
+	return p.value(0x366)
+}
+
+func (p Property) UpdateLife(i int16) Property {
+	return p.updateValue(0x366, i)
+}
+
+func (p Property) MaxLife() int16 {
+	return p.value(0x368)
+}
+
+func (p Property) UpdateMaxLife(i int16) Property {
+	return p.updateValue(0x368, i)
+}
+
+func (p Property) DoubleAttack() bool {
+	return p.value(0x3B8) == 1
+}
+
+func (p Property) UpdateDoubleAttack(b bool) Property {
+	if b {
+		return p.updateValue(0x3B8, 1)
+	} else {
+		return p.updateValue(0x3B8, 0)
+	}
+}
+
+func (p Property) Sense() int16 {
+	return p.value(0x3B2)
+}
+
+func (p Property) UpdateSense(i int16) Property {
+	return p.updateValue(0x3B2, i)
+}
+
+func (p Property) Poisonous() int16 {
+	return p.value(0x3B6)
+}
+
+func (p Property) UpdatePoisonous(i int16) Property {
+	return p.updateValue(0x3B6, i)
+}
+
+func (p Property) Qualification() int16 {
+	return p.value(0x3BC)
+}
+
+func (p Property) UpdateQualification(i int16) Property {
+	return p.updateValue(0x3BC, i)
+}
+
 var Gongfu = []string{"无",
 	"野球拳", "武当长拳", "罗汉拳", "灵蛇拳",
 	"神王毒掌", "七伤拳", "混元掌", "寒冰绵掌",
