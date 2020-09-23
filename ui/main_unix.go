@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"../conf"
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/dialog"
 	"fyne.io/fyne/widget"
+	"github.com/ClarkGuan/jinyong/conf"
 )
 
 func main() {
