@@ -88,12 +88,13 @@ func savePathFunc(win fyne.Window, s string) (*frame, conf.Property, error) {
 	} else {
 		pf := newFrame(win)
 		pf.onClick = func() {
-			//infinite := dialog.NewProgressInfinite("注意", "数据存储中……", win)
-			//infinite.Show()
-			fmt.Println(pf.save(buf))
-			conf.Munmap(buf)
-			//infinite.Hide()
-			fmt.Println("点击了")
+			if err := pf.save(buf); err != nil {
+				dialog.ShowError(err, win)
+			} else if err = conf.Munmap(buf); err != nil {
+				dialog.ShowError(err, win)
+			} else {
+				dialog.ShowInformation("注意", "修改成功！", win)
+			}
 		}
 		pf.update(buf)
 		return pf, buf, nil
