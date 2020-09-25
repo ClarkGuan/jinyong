@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"fyne.io/fyne"
-	"fyne.io/fyne/dialog"
 	"fyne.io/fyne/widget"
 	"github.com/ClarkGuan/jinyong/conf"
 )
 
 type frame struct {
 	content fyne.CanvasObject
+	form    *widget.Form
 
 	senseEntry         *widget.Entry
 	moralityEntry      *widget.Entry
@@ -21,6 +20,8 @@ type frame struct {
 
 	wugongs [10]*widget.Select
 	jingyan [10]*widget.Entry
+
+	onClick func()
 }
 
 func newFrame(parent fyne.Window) *frame {
@@ -51,14 +52,7 @@ func newFrame(parent fyne.Window) *frame {
 	}
 
 	form.SubmitText = "修改"
-	form.OnSubmit = func() {
-		progressInfiniteDialog := dialog.NewProgressInfinite("金庸群侠传修改器", "修改中，请等待……", parent)
-		progressInfiniteDialog.Show()
-		time.AfterFunc(5*time.Second, func() {
-			progressInfiniteDialog.Hide()
-		})
-	}
-	form.Refresh()
+	f.form = form
 
 	container := widget.NewVScrollContainer(form)
 	container.SetMinSize(fyne.NewSize(200, 350))
@@ -80,6 +74,11 @@ func (f *frame) update(p conf.Property) {
 
 	for i := range f.jingyan {
 		f.jingyan[i].SetText(fmt.Sprintf("%d", p.Jingyan(i)))
+	}
+
+	if f.onClick != nil {
+		f.form.OnSubmit = f.onClick
+		f.form.Refresh()
 	}
 }
 

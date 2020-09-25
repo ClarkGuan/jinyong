@@ -74,7 +74,7 @@ func main() {
 }
 
 func unixMmap(path string) ([]byte, error) {
-	f, err := os.Open(path)
+	f, err := os.OpenFile(path, os.O_RDWR, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +87,14 @@ func savePathFunc(win fyne.Window, s string) (*frame, conf.Property, error) {
 		return nil, nil, err
 	} else {
 		pf := newFrame(win)
+		pf.onClick = func() {
+			//infinite := dialog.NewProgressInfinite("注意", "数据存储中……", win)
+			//infinite.Show()
+			fmt.Println(pf.save(buf))
+			conf.Munmap(buf)
+			//infinite.Hide()
+			fmt.Println("点击了")
+		}
 		pf.update(buf)
 		return pf, buf, nil
 	}
