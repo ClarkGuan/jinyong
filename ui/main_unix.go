@@ -37,11 +37,11 @@ func main() {
 	ch := make(chan os.Signal, 1)
 	go func() {
 		for range ch {
-			dialog.NewConfirm("警告", "是否退出？", func(b bool) {
+			dialog.ShowConfirm("警告", "是否退出？", func(b bool) {
 				if b {
 					a.Quit()
 				}
-			}, w).Show()
+			}, w)
 		}
 	}()
 	signal.Notify(ch, syscall.SIGHUP, syscall.SIGINT, syscall.SIGKILL)
