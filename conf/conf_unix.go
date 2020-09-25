@@ -13,7 +13,7 @@ func Mmap(f *os.File) ([]byte, error) {
 		return nil, err
 	}
 	filesize := stat.Size()
-	return syscall.Mmap(int(f.Fd()), 0, int(filesize), syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_SHARED)
+	return syscall.Mmap(int(f.Fd()), 0, int(filesize), syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_PRIVATE)
 }
 
 func Munmap(buf []byte) error {

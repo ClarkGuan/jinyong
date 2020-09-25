@@ -71,13 +71,13 @@ func savePathFunc(win fyne.Window, s string) func() {
 	return func() {
 		f, err := os.Open(s)
 		if err != nil {
-			dialog.NewError(err, win).Show()
+			showErrorDialog(win, fmt.Sprintf("打开文件失败 %v", err))
 			return
 		}
 		defer f.Close()
 		buf, err := conf.Mmap(f)
 		if err != nil {
-			dialog.NewError(err, win).Show()
+			showErrorDialog(win, fmt.Sprintf("mmap 失败 %v", err))
 			return
 		}
 
@@ -85,4 +85,10 @@ func savePathFunc(win fyne.Window, s string) func() {
 		pf.update(buf)
 		win.SetContent(pf.content)
 	}
+}
+
+func showErrorDialog(win fyne.Window, s string) {
+	dg := dialog.NewInformation("警告", s, win)
+	dg.SetOnClosed(fyne.CurrentApp().Quit)
+	dg.Show()
 }
