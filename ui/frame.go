@@ -58,6 +58,8 @@ func newFrame(parent fyne.Window) *frame {
 			progressInfiniteDialog.Hide()
 		})
 	}
+	form.Refresh()
+
 	container := widget.NewVScrollContainer(form)
 	container.SetMinSize(fyne.NewSize(200, 350))
 	f.content = container

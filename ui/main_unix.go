@@ -28,7 +28,6 @@ func main() {
 
 	w := a.NewWindow("金庸群侠传修改器")
 	w.SetMaster()
-	w.SetOnClosed(closeFunc)
 	w.Resize(fyne.NewSize(400, 20))
 	w.SetContent(infiniteProgressBar)
 	w.Show()
@@ -53,37 +52,43 @@ func main() {
 			w.SetContent(widget.NewLabel(fmt.Sprintf("对不起，没有找到指定的存档文件 %q", path)))
 			return
 		}
-		w.SetContent(widget.NewHBox(
-			widget.NewButton("存档1", savePathFunc(w, savesPath[0])),
-			widget.NewButton("存档2", savePathFunc(w, savesPath[1])),
-			widget.NewButton("存档3", savePathFunc(w, savesPath[2])),
+
+		frames := make([]*frame, 3)
+		props := make([]conf.Property, 3)
+
+		for i := range savesPath {
+			if frames[i], props[i], err = savePathFunc(w, savesPath[i]); err != nil {
+				showErrorDialog(w, fmt.Sprintf("打开文件或 mmap 失败 %v", err))
+				return
+			}
+		}
+
+		w.SetContent(widget.NewTabContainer(
+			widget.NewTabItem("存档1", frames[0].content),
+			widget.NewTabItem("存档2", frames[1].content),
+			widget.NewTabItem("存档3", frames[2].content),
 		))
 	}()
 
 	a.Run()
 }
 
-func closeFunc() {
-
+func unixMmap(path string) ([]byte, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return conf.Mmap(f)
 }
 
-func savePathFunc(win fyne.Window, s string) func() {
-	return func() {
-		f, err := os.Open(s)
-		if err != nil {
-			showErrorDialog(win, fmt.Sprintf("打开文件失败 %v", err))
-			return
-		}
-		defer f.Close()
-		buf, err := conf.Mmap(f)
-		if err != nil {
-			showErrorDialog(win, fmt.Sprintf("mmap 失败 %v", err))
-			return
-		}
-
+func savePathFunc(win fyne.Window, s string) (*frame, conf.Property, error) {
+	if buf, err := unixMmap(s); err != nil {
+		return nil, nil, err
+	} else {
 		pf := newFrame(win)
 		pf.update(buf)
-		win.SetContent(pf.content)
+		return pf, buf, nil
 	}
 }
 
