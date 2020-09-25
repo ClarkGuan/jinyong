@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"unsafe"
 )
@@ -19,34 +20,42 @@ func (p Property) updateValue(index int, v int16) Property {
 	return p
 }
 
+// 体力
 func (p Property) Body() int16 {
 	return p.value(0x36E)
 }
 
+// 体力
 func (p Property) UpdateBody(i int16) Property {
 	return p.updateValue(0x36E, i)
 }
 
+// 当前生命值
 func (p Property) Life() int16 {
 	return p.value(0x366)
 }
 
+// 当前生命值
 func (p Property) UpdateLife(i int16) Property {
 	return p.updateValue(0x366, i)
 }
 
+// 生命最大值
 func (p Property) MaxLife() int16 {
 	return p.value(0x368)
 }
 
+// 生命最大值
 func (p Property) UpdateMaxLife(i int16) Property {
 	return p.updateValue(0x368, i)
 }
 
+// 左右互搏
 func (p Property) DoubleAttack() bool {
 	return p.value(0x3B8) == 1
 }
 
+// 左右互搏
 func (p Property) UpdateDoubleAttack(b bool) Property {
 	if b {
 		return p.updateValue(0x3B8, 1)
@@ -55,36 +64,64 @@ func (p Property) UpdateDoubleAttack(b bool) Property {
 	}
 }
 
+// 武学常识
 func (p Property) Sense() int16 {
 	return p.value(0x3B2)
 }
 
+// 武学常识
 func (p Property) UpdateSense(i int16) Property {
 	return p.updateValue(0x3B2, i)
 }
 
+// 功夫带毒
 func (p Property) Poisonous() int16 {
 	return p.value(0x3B6)
 }
 
+// 功夫带毒
 func (p Property) UpdatePoisonous(i int16) Property {
 	return p.updateValue(0x3B6, i)
 }
 
+// 资质
 func (p Property) Qualification() int16 {
 	return p.value(0x3BC)
 }
 
+// 资质
 func (p Property) UpdateQualification(i int16) Property {
 	return p.updateValue(0x3BC, i)
 }
 
+// 道德
 func (p Property) Morality() int16 {
 	return p.value(0x3B4)
 }
 
+// 道德
 func (p Property) UpdateMorality(i int16) Property {
 	return p.updateValue(0x3B4, i)
+}
+
+// 武功
+func (p Property) Wugong(i int) int16 {
+	return p.value(0x3C2 + i*2)
+}
+
+// 武功
+func (p Property) UpdateWugong(i int, v int16) Property {
+	return p.updateValue(0x3C2+i*2, v)
+}
+
+// 武功经验
+func (p Property) Jingyan(i int) int16 {
+	return p.value(0x3D6 + i*2)
+}
+
+// 武功经验
+func (p Property) UpdateJingyan(i int, v int16) Property {
+	return p.updateValue(0x3D6+i*2, v)
 }
 
 var Gongfu = []string{"无",
@@ -181,4 +218,9 @@ func SetUint16(buf []byte, index int, value uint16) {
 
 func SetInt16(buf []byte, index int, value int16) {
 	SetUint16(buf, index, *((*uint16)(unsafe.Pointer(&value))))
+}
+
+func ParseInt16(s string) (int16, error) {
+	i, err := strconv.ParseInt(s, 10, 16)
+	return int16(i), err
 }
