@@ -27,7 +27,7 @@ type frame struct {
 	onClick func()
 }
 
-func newFrame(parent fyne.Window) *frame {
+func newFrame() *frame {
 	f := frame{
 		resistanceEntry:    widget.NewEntry(),
 		senseEntry:         widget.NewEntry(),

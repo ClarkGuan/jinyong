@@ -86,7 +86,7 @@ func savePathFunc(win fyne.Window, s string) (*frame, conf.Property, error) {
 	if buf, err := unixMmap(s); err != nil {
 		return nil, nil, err
 	} else {
-		pf := newFrame(win)
+		pf := newFrame()
 		pf.onClick = func() {
 			if err := pf.save(buf); err != nil {
 				dialog.ShowError(err, win)
