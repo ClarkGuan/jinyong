@@ -50,6 +50,16 @@ func (p Property) UpdateMaxLife(i int16) Property {
 	return p.updateValue(0x368, i)
 }
 
+// 毒抗
+func (p Property) Resistance() int16 {
+	return p.value(0x3A6)
+}
+
+// 毒抗
+func (p Property) UpdateResistance(i int16) Property {
+	return p.updateValue(0x3A6, i)
+}
+
 // 左右互搏
 func (p Property) DoubleAttack() bool {
 	return p.value(0x3B8) == 1

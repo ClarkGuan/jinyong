@@ -14,6 +14,7 @@ type frame struct {
 	content fyne.CanvasObject
 	form    *widget.Form
 
+	resistanceEntry    *widget.Entry
 	senseEntry         *widget.Entry
 	moralityEntry      *widget.Entry
 	poisonousEntry     *widget.Entry
@@ -28,6 +29,7 @@ type frame struct {
 
 func newFrame(parent fyne.Window) *frame {
 	f := frame{
+		resistanceEntry:    widget.NewEntry(),
 		senseEntry:         widget.NewEntry(),
 		moralityEntry:      widget.NewEntry(),
 		poisonousEntry:     widget.NewEntry(),
@@ -36,6 +38,7 @@ func newFrame(parent fyne.Window) *frame {
 	}
 
 	form := widget.NewForm(
+		widget.NewFormItem("毒抗:", f.resistanceEntry),
 		widget.NewFormItem("武学常识:", f.senseEntry),
 		widget.NewFormItem("道德:", f.moralityEntry),
 		widget.NewFormItem("功夫带毒:", f.poisonousEntry),
@@ -64,6 +67,7 @@ func newFrame(parent fyne.Window) *frame {
 }
 
 func (f *frame) update(p conf.Property) {
+	f.resistanceEntry.SetText(fmt.Sprintf("%d", p.Resistance()))
 	f.senseEntry.SetText(fmt.Sprintf("%d", p.Sense()))
 	f.moralityEntry.SetText(fmt.Sprintf("%d", p.Morality()))
 	f.poisonousEntry.SetText(fmt.Sprintf("%d", p.Poisonous()))
@@ -85,6 +89,12 @@ func (f *frame) update(p conf.Property) {
 }
 
 func (f *frame) save(p conf.Property) error {
+	if i, err := conf.ParseInt16(f.resistanceEntry.Text); err != nil {
+		return err
+	} else {
+		p.UpdateResistance(i)
+	}
+
 	if i, err := conf.ParseInt16(f.senseEntry.Text); err != nil {
 		return err
 	} else {
