@@ -20,6 +20,23 @@ func (p Property) updateValue(index int, v int16) Property {
 	return p
 }
 
+// 朋友
+func (p Property) Friend(i int) int16 {
+	value := p.value(26 + i*2)
+	if value == -1 {
+		value = 0
+	}
+	return value
+}
+
+// 朋友
+func (p Property) UpdateFriend(i int, v int16) Property {
+	if v == 0 {
+		v = -1
+	}
+	return p.updateValue(26+i*2, v)
+}
+
 // 体力
 func (p Property) Body() int16 {
 	return p.value(0x36E)

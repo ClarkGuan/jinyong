@@ -23,6 +23,7 @@ type frame struct {
 
 	wugongs [10]*widget.Select
 	jingyan [10]*widget.Entry
+	friends [5]*widget.Select
 
 	onClick func()
 }
@@ -56,6 +57,11 @@ func newFrame() *frame {
 		form.Append(fmt.Sprintf("武功%d经验", i+1), f.jingyan[i])
 	}
 
+	for i := range f.friends {
+		f.friends[i] = widget.NewSelect(conf.Friends, nil)
+		form.Append(fmt.Sprintf("朋友%d", i+1), f.friends[i])
+	}
+
 	form.SubmitText = "修改"
 	f.form = form
 
@@ -80,6 +86,10 @@ func (f *frame) update(p conf.Property) {
 
 	for i := range f.jingyan {
 		f.jingyan[i].SetText(fmt.Sprintf("%d", p.Jingyan(i)))
+	}
+
+	for i := range f.friends {
+		f.friends[i].SetSelected(conf.Friends[p.Friend(i)])
 	}
 
 	if f.onClick != nil {
@@ -132,6 +142,11 @@ func (f *frame) save(p conf.Property) error {
 		} else {
 			p.UpdateJingyan(i, v)
 		}
+	}
+
+	for i := range f.friends {
+		index := conf.FriendsID[f.friends[i].Selected]
+		p.UpdateFriend(i, int16(index))
 	}
 
 	return nil
