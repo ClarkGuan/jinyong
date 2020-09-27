@@ -24,12 +24,16 @@ func main() {
 	}
 
 	a := app.NewWithID("金庸群侠传修改器")
-	infiniteProgressBar := widget.NewProgressBarInfinite()
 
 	// 初始化中文字体
 	settings := a.Settings()
-	settings.SetTheme(theme(settings.Theme()))
+	if f, err := theme(settings.Theme()); err == nil {
+		settings.SetTheme(f)
+	} else {
+		fmt.Fprintln(os.Stderr, err)
+	}
 
+	infiniteProgressBar := widget.NewProgressBarInfinite()
 	w := a.NewWindow("金庸群侠传修改器")
 	w.SetMaster()
 	w.Resize(fyne.NewSize(400, 20))
