@@ -20,7 +20,7 @@ func main() {
 	if len(os.Args) > 1 {
 		path = os.Args[1]
 	} else {
-		path, _ = os.Executable()
+		path, _ = conf.ExecutablePath()
 	}
 
 	a := app.NewWithID("金庸群侠传修改器")
